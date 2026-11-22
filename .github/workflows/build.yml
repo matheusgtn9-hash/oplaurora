@@ -1,6 +1,5 @@
 name: Build OPL Aurora
 on:
-  push:
   workflow_dispatch:
 jobs:
   build:
@@ -8,10 +7,13 @@ jobs:
     container: ps2dev/ps2dev:latest
     steps:
       - uses: actions/checkout@v4
-      - run: apk add build-base git zip gawk python3 p7zip bash
+      - run: apk add build-base git zip gawk python3 py3-pip p7zip bash curl wget unzip
       - run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-      - run: make
+      - run: chmod +x *.sh
+      - run: make release
       - uses: actions/upload-artifact@v4
         with:
           name: OPNPS2LD
-          path: OPNPS2LD.ELF
+          path: |
+            OPNPS2LD.ELF
+            *.ELF
